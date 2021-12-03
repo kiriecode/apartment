@@ -1,10 +1,9 @@
 package Dao;
 
 import java.sql.*;
-import java.util.Collection;
 
 public class BaseDao {
-    protected Connection con;
+    protected Connection conn;
     protected PreparedStatement pst;
     protected ResultSet rs;
 
@@ -31,8 +30,8 @@ public class BaseDao {
         if(pst != null) {
             pst.close();
         }
-        if(con != null) {
-            con.close();
+        if(conn != null) {
+            conn.close();
         }
     }
 }

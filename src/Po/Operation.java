@@ -1,6 +1,6 @@
 package Po;
 
-public class operation {
+public class Operation {
     private int operation_id, type, payment_account;
     private String account_id, date;
 

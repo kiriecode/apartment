@@ -1,6 +1,6 @@
 package Po;
 
-public class register {
+public class Register {
     private int identity;
     private String account, password;
 

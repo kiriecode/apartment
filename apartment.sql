@@ -23,14 +23,18 @@ CREATE TABLE `student` (
                            `college` char(20) NOT NULL COMMENT '学院',
                            `major` char(20) NOT NULL COMMENT '专业',
                            `classes` char(10) NOT NULL COMMENT '班级',
-                           `dorm_id` char(10) NOT NULL COMMENT '宿舍楼号',
+                           `building_id` char(10) NOT NULL COMMENT '楼号',
+                           `dorm_id` char(10) NOT NULL COMMENT '宿舍号',
                            `bed_id` int(1) NOT NULL COMMENT '床号',
                            `status` smallint(1) NOT NULL DEFAULT '0' COMMENT '状态（0表示不在，1表示在）',
                            PRIMARY KEY (`student_id`),
                            UNIQUE KEY `UNIQUE` (`contact`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `student`(`name`,`gender`,`birthday`,`contact`,`student_id`,`college`,`major`,`classes`,`dorm_id`,`bed_id`,`status`) VALUES ('樱木花道','男','76441876','15152245359','19110103024','计算机科学与技术学院','计算机科学与技术','计科1903','11#518',1,0), ('赤木晴子','女','767761871','15512556259','20120101040','计算机科学与技术学院','计算机科学与技术','计科1902','2#330',3,0), ('流川枫','男','767164856','18866956314','20110407122','车辆交通学院','车辆工程','车辆1902','Y1#220',4,0), ('三井寿','男','767112271','15613516684','20110504011','数学学院','信息科学技术','信科2003','5#208',2,0);
+INSERT INTO `student` VALUES ('樱木花道','男','76441876','15152245359','19110103024','计算机科学与技术学院','计算机科学与技术','计科1903','11', '518',1,0), ('赤木晴子','女','767761871','15512556259','20120101040','计算机科学与技术学院','计算机科学与技术','计科1902','2', '330',3,0), ('流川枫','男','767164856','18866956314','20110407122','车辆交通学院','车辆工程','车辆1902','Y1', '220',4,0), ('三井寿','男','767112271','15613516684','20110504011','数学学院','信息科学技术','信科2003','11', '208',2,0);
+
+UPDATE `student` SET `gender` = '未知' WHERE student_id = '19110103024';
+UPDATE `student` SET `status` = 1 WHERE student_id = '19110103024';
 
 -- 2.宿管
 /*Table structure for table `manager` */
@@ -68,17 +72,36 @@ INSERT INTO `register` VALUES (1, '19110103024', 123), (1, '20120101040', 123), 
 DROP TABLE IF EXISTS `dorm`;
 
 CREATE TABLE `dorm` (
-                        `dorm_id` char(10) DEFAULT NULL COMMENT '宿舍号（4#311/Y1#209...）',
+                        `name` char(20) NOT NULL COMMENT '宿舍名',
+                        `building_id` char(10) DEFAULT NULL COMMENT '楼号（4/Y1...）',
+                        `dorm_id` char(10) DEFAULT NULL COMMENT '宿舍号（311/209...）',
                         `bed_num` int(2) DEFAULT NULL COMMENT '床位数',
                         `people_num` int(2) DEFAULT NULL COMMENT '人数',
-                        `deposit` int(10) DEFAULT 0 NOT NULL COMMENT '宿舍费用'
+                        `deposit` double DEFAULT 0 NOT NULL COMMENT '宿舍费用'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `dorm` VALUES ('11#518', 4, 4, 1000), ('2#330', 4, 3, 2000), ('Y1#220', 6, 6, 2350), ('5#208', 4, 4, 2000);
+INSERT INTO `dorm` VALUES ('百草园', '11', '518', 4, 4, 1000), ('三味书屋', '2', '330', 4, 3, 2000), ('幸福屋', 'Y1', '220', 6, 6, 2350), ('自习室', '11', '208', 4, 4, 2000);
+
+SELECT * FROM `dorm` WHERE `building_id` = '11' AND `dorm_id` = '518';
+
+-- 5.楼宇
+/*Table structure for table `building` */
+
+DROP TABLE IF EXISTS `building`;
+
+CREATE TABLE `building` (
+                            `name` char(20) NOT NULL COMMENT '楼宇名',
+                            `building_id` char(10) NOT NULL COMMENT '楼宇号（4/Y1...）',
+                            `address` char(30) DEFAULT NULL COMMENT '位置',
+                            `manager_id` char(11) NOT NULL COMMENT '楼宇管理员号',
+                            PRIMARY KEY (`building_id`),
+                            UNIQUE KEY `UNIQUE` (`building_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+INSERT INTO `building` VALUES ('11号男生公寓', '11', '大学生艺术中心北50米', '30120026375'), ('2号女生公寓', '2', '第一餐厅东100米', '30120026375'), ('研究生1号男生公寓', 'Y1', '第二操场北35米', '30110521341');
 
 
-
--- 5.操作
+-- 6.操作
 /*Table structure for table `operation` */
 
 DROP TABLE IF EXISTS `operation`;

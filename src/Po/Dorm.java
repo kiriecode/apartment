@@ -1,17 +1,36 @@
 package Po;
 
-public class dorm {
-    private String dorm_id;
-    private int bed_num, people_num, deposit;
+public class Dorm {
+    private String name, building_id, dorm_id;
+    private int bed_num, people_num;
+    private double deposit;
 
     @Override
     public String toString() {
-        return "dorm{" +
-                "dorm_id='" + dorm_id + '\'' +
+        return "Dorm{" +
+                "name='" + name + '\'' +
+                ", building_id='" + building_id + '\'' +
+                ", dorm_id='" + dorm_id + '\'' +
                 ", bed_num=" + bed_num +
                 ", people_num=" + people_num +
                 ", deposit=" + deposit +
                 '}';
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBuilding_id() {
+        return building_id;
+    }
+
+    public void setBuilding_id(String building_id) {
+        this.building_id = building_id;
     }
 
     public String getDorm_id() {
@@ -38,11 +57,11 @@ public class dorm {
         this.people_num = people_num;
     }
 
-    public int getDeposit() {
+    public double getDeposit() {
         return deposit;
     }
 
-    public void setDeposit(int deposit) {
+    public void setDeposit(double deposit) {
         this.deposit = deposit;
     }
 }

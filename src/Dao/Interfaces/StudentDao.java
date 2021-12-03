@@ -3,15 +3,17 @@ package Dao.Interfaces;
 import Po.Student;
 
 import java.sql.SQLException;
+import java.util.List;
 
 public interface StudentDao {
     // note 通过id查找
-    public Student selectById(String student_id) throws SQLException, ClassNotFoundException;
-    // note 通过id签到
-    public boolean signIn(String student_id) throws SQLException, ClassNotFoundException;
-    // note 通过id签退
-    public boolean signOut(String student_id) throws SQLException;
-    // note 缴费
-    public int saveMoney(String dorm_id, int value);
-
+    public Student selectById(String student_id);
+    // note 查找全部学生
+    public List<Student> selectAll();
+    // note 添加student到表中
+    public int addStudent(Student student);
+    // note 通过id修改为新的student
+    public int updateStudent(String student_id, Student student);
+    // note 通过id删除
+    public int deleteStudent(String student_id);
 }

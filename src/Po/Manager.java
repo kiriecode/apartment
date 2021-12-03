@@ -1,6 +1,6 @@
 package Po;
 
-public class manager {
+public class Manager {
     private String name, manager_id, contact;
 
     @Override
