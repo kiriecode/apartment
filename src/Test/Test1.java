@@ -1,14 +1,8 @@
 package Test;
 
-import Dao.Implementation.DormDaoImpl;
-import Dao.Implementation.ManagerDaoImpl;
-import Dao.Implementation.StudentDaoImpl;
-import Dao.Interfaces.DormDao;
-import Dao.Interfaces.ManagerDao;
-import Dao.Interfaces.StudentDao;
-import Po.Dorm;
-import Po.Manager;
-import Po.Student;
+import Dao.Implementation.*;
+import Dao.Interfaces.*;
+import Po.*;
 
 import java.util.List;
 
@@ -18,6 +12,9 @@ public class Test1 {
         StudentDao studentDao = new StudentDaoImpl();
         ManagerDao managerDao = new ManagerDaoImpl();
         DormDao dormDao = new DormDaoImpl();
+        BuildingDao buildingDao = new BuildingDaoImpl();
+        RegisterDao registerDao = new RegisterDaoImpl();
+        LogDao logDao = new LogDaoImpl();
         // note
 
 
@@ -35,6 +32,21 @@ public class Test1 {
         List<Dorm> dormList = dormDao.selectAll();
         for(Dorm dorm : dormList) {
             System.out.println(dorm);
+        }
+        System.out.println();
+        List<Building> buildingList = buildingDao.selectAll();
+        for(Building building : buildingList) {
+            System.out.println(building);
+        }
+        System.out.println();
+        List<Register> registerList = registerDao.selectAll();
+        for(Register register : registerList) {
+            System.out.println(register);
+        }
+        System.out.println();
+        List<Log> logList = logDao.selectAll();
+        for(Log log : logList) {
+            System.out.println(log);
         }
     }
 }

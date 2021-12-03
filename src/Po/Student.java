@@ -1,10 +1,15 @@
 package Po;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Student {
     private String name, gender, birthday, contact, student_id, college, major, classes, building_id, dorm_id;
     private int bed_id, status;
+
+    public static String rowLine = "姓名 性别 生日 联系方式 学号 学院 专业 班级 公寓楼 宿舍号 床号 签到状态";
+    public static String[] rowNames = rowLine.split(" ");
 
     public Student() {
         super();

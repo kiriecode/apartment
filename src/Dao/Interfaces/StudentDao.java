@@ -2,7 +2,6 @@ package Dao.Interfaces;
 
 import Po.Student;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface StudentDao {

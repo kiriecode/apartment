@@ -31,10 +31,9 @@ CREATE TABLE `student` (
                            UNIQUE KEY `UNIQUE` (`contact`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `student` VALUES ('樱木花道','男','76441876','15152245359','19110103024','计算机科学与技术学院','计算机科学与技术','计科1903','11', '518',1,0), ('赤木晴子','女','767761871','15512556259','20120101040','计算机科学与技术学院','计算机科学与技术','计科1902','2', '330',3,0), ('流川枫','男','767164856','18866956314','20110407122','车辆交通学院','车辆工程','车辆1902','Y1', '220',4,0), ('三井寿','男','767112271','15613516684','20110504011','数学学院','信息科学技术','信科2003','11', '208',2,0);
+INSERT INTO `student` VALUES ('樱木花道','男','2000-07-01','15152245359','19110103024','计算机科学与技术学院','计算机科学与技术','计科1903','11', '518',1,0), ('赤木晴子','女','2000-12-21','15512556259','20120101040','计算机科学与技术学院','计算机科学与技术','计科1902','2', '330',3,0), ('流川枫','男','2001-03-01','18866956314','20110407122','车辆交通学院','车辆工程','车辆1902','Y1', '220',4,0), ('三井寿','男','1999-12-06','15613516684','20110504011','数学学院','信息科学技术','信科2003','11', '208',2,0);
 
-UPDATE `student` SET `gender` = '未知' WHERE student_id = '19110103024';
-UPDATE `student` SET `status` = 1 WHERE student_id = '19110103024';
+INSERT INTO `student` VALUES ('0同学', '未知', '2000-1-1', '00000000000', '1', 'empty', 'empty', 'empty', '11', '518', 1, 0);
 
 -- 2.宿管
 /*Table structure for table `manager` */
@@ -64,7 +63,7 @@ CREATE TABLE `register` (
                             UNIQUE KEY `UNIQUE` (`account`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `register` VALUES (1, '19110103024', 123), (1, '20120101040', 123), (1, '20110407122', 123), (1, '20110504011', 123), (2, '30120026375', 123), (2, '30110521341', 123), (3, '123', 123);
+INSERT INTO `register` VALUES (1, '19110103024', '123'), (1, '20120101040', '123'), (1, '20110407122', '123'), (1, '20110504011', '123'), (2, '30120026375', '123'), (2, '30110521341', '123'), (3, '123', '123'), (1, '1', '1');
 
 -- 4.宿舍
 /*Table structure for table `dorm` */
@@ -82,7 +81,7 @@ CREATE TABLE `dorm` (
 
 INSERT INTO `dorm` VALUES ('百草园', '11', '518', 4, 4, 1000), ('三味书屋', '2', '330', 4, 3, 2000), ('幸福屋', 'Y1', '220', 6, 6, 2350), ('自习室', '11', '208', 4, 4, 2000);
 
-SELECT * FROM `dorm` WHERE `building_id` = '11' AND `dorm_id` = '518';
+-- SELECT * FROM `dorm` WHERE `building_id` = '11' AND `dorm_id` = '518';
 
 -- 5.楼宇
 /*Table structure for table `building` */
@@ -102,18 +101,20 @@ INSERT INTO `building` VALUES ('11号男生公寓', '11', '大学生艺术中心
 
 
 -- 6.操作
-/*Table structure for table `operation` */
+/*Table structure for table `log` */
 
-DROP TABLE IF EXISTS `operation`;
+DROP TABLE IF EXISTS `log`;
 
-CREATE TABLE `operation` (
-                             `operation_id` int(10) NOT NULL AUTO_INCREMENT COMMENT '操作号',
-                             `account_id` char(11) NOT NULL COMMENT '用户id',
-                             `type` int(1) NOT NULL COMMENT '（1：缴费，2：签入，3：签出）',
-                             `payment_account` int(10) DEFAULT NULL COMMENT '缴费金额（如有）',
-                             `date` datetime DEFAULT NULL COMMENT '操作日期',
-                             PRIMARY KEY (`operation_id`)
+CREATE TABLE `log` (
+                       `log_id` int(10) NOT NULL AUTO_INCREMENT COMMENT '操作号',
+                       `account_id` char(11) NOT NULL COMMENT '用户id',
+                       `type` int(1) NOT NULL COMMENT '（1：缴费，2：签入，3：签出）',
+                       `building_id` char(10) DEFAULT NULL COMMENT '楼号（如有）',
+                       `dorm_id` char(10) DEFAULT NULL COMMENT '宿舍号（如有）',
+                       `payment_account` int(10) DEFAULT NULL COMMENT '缴费金额（如有）',
+                       `date` datetime DEFAULT NULL COMMENT '操作日期',
+                       PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
-INSERT INTO `operation`(	`operation_id`, `account_id`, `type`, 	`payment_account`) VALUES (20001, '19110103024', 1, 200);
-INSERT INTO `operation`(	`operation_id`, `account_id`, `type`) VALUES (20002, '19110103024', 2);
+INSERT INTO `log`VALUES (null, '19110103024', 1, '11', '518', 300.5, null);
+INSERT INTO `log`(	`log_id`, `account_id`, `type`, `date`) VALUES (20002, '19110103024', 2, null);

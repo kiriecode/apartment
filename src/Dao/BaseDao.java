@@ -17,9 +17,9 @@ public class BaseDao {
         String user = "root";
         String password = "root123456";
         Class.forName("com.mysql.cj.jdbc.Driver");
-        Connection con = DriverManager.getConnection(url, user, password);
+        Connection conn = DriverManager.getConnection(url, user, password);
         closeAll();
-        return con;
+        return conn;
     }
 
     // 关闭对象

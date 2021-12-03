@@ -1,5 +1,7 @@
 package Po;
 
+import java.util.Objects;
+
 public class Register {
     private int identity;
     private String account, password;
@@ -11,6 +13,19 @@ public class Register {
                 ", account='" + account + '\'' +
                 ", password='" + password + '\'' +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Register)) return false;
+        Register register = (Register) o;
+        return identity == register.identity && Objects.equals(account, register.account) && Objects.equals(password, register.password);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identity, account, password);
     }
 
     public int getIdentity() {
