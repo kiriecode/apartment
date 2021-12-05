@@ -8,8 +8,9 @@ import Ex.NoSuchAccountException;
 import Ex.PasswordWrongException;
 import Po.*;
 
-import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class BizImpl implements Biz {
     StudentDao studentDao = new StudentDaoImpl();
@@ -24,7 +25,7 @@ public class BizImpl implements Biz {
      */
     @Override
     public int Login(String account, String password) throws NoSuchAccountException, PasswordWrongException {
-        int identity = 0;
+        int identity;
         Register register = registerDao.selectById(account);
         if(register == null) {
             throw new NoSuchAccountException(account);
@@ -56,7 +57,7 @@ public class BizImpl implements Biz {
     /**
      * 展示学生信息（在所有table上）
      */
-    public void studentShowOnAll(Student student) throws NoSuchAccountException {
+    public void studentShowOnAll(Student student) {
         System.out.println(student);
     }
 
@@ -117,7 +118,7 @@ public class BizImpl implements Biz {
      */
     @Override
     public boolean signIn(String student_id) {
-        return studentDao.signIn(student_id) > 0;
+        return logDao.signIn(student_id) > 0;
     }
 
     /**
@@ -125,14 +126,52 @@ public class BizImpl implements Biz {
      */
     @Override
     public boolean signOut(String student_id) {
-        return studentDao.signOut(student_id) > 0;
+        return logDao.signOut(student_id) > 0;
     }
 
     /**
      * 存value元钱到宿舍 building_id # dorm_id
      */
     @Override
-    public boolean saveMoney(String building_id, String dorm_id, double value) throws InputValueException {
-        return dormDao.saveMoney(building_id, dorm_id, value) > 0;
+    public boolean saveMoney(String id, String building_id, String dorm_id, double value) throws InputValueException {
+        return logDao.saveMoney(id, building_id, dorm_id, value) > 0;
+    }
+
+    /**
+     * 返回一个管理员的全部管理楼栋
+     */
+    @Override
+    public List<Building> searchBuildingsByManager_id(String manager_id) {
+        List<Building> buildingList = new ArrayList<>();
+        for(Building building : buildingDao.selectAll()) {
+            if(Objects.equals(building.getManager_id(), manager_id)) {
+                buildingList.add(building);
+            }
+        }
+        return buildingList;
+    }
+
+    /**
+     * 返回一栋楼的全部宿舍
+     */
+    @Override
+    public List<Dorm> searchDormsByBuilding_id(List<Building> buildingList) {
+        List<Dorm> dormList = new ArrayList<>();
+        for(Dorm dorm : dormDao.selectAll()) {
+            for(Building building : buildingList) {
+                if(Objects.equals(building.getBuilding_id(), dorm.getBuilding_id())) {
+                    dormList.add(dorm);
+                }
+            }
+        }
+        return dormList;
+    }
+
+    /**
+     * 返回全部日志信息
+     */
+    @Override
+    public List<Log> searchAllLog() {
+        return logDao.selectAll();
     }
 }

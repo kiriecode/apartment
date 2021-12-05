@@ -3,12 +3,9 @@ package Controller.Interfaces;
 import Ex.InputValueException;
 import Ex.NoSuchAccountException;
 import Ex.PasswordWrongException;
-import Po.Manager;
-import Po.Register;
-import Po.Student;
+import Po.*;
 
-import java.sql.SQLException;
-import java.util.Map;
+import java.util.List;
 
 public interface Biz {
     // note 登录
@@ -30,5 +27,11 @@ public interface Biz {
     // note 通过id签退
     public boolean signOut(String student_id) ;
     // note 缴费
-    public boolean saveMoney(String building_id, String dorm_id, double value) throws InputValueException;
+    public boolean saveMoney(String id, String building_id, String dorm_id, double value) throws InputValueException;
+    // note 查看所管理楼宇
+    public List<Building> searchBuildingsByManager_id(String manager_id);
+    // note 查看所管理宿舍
+    public List<Dorm> searchDormsByBuilding_id(List<Building> buildingList);
+    // note 查找日志信息
+    public List<Log> searchAllLog();
 }

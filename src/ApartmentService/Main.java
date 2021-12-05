@@ -12,6 +12,7 @@ import Po.*;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
@@ -31,11 +32,11 @@ public class Main {
     // x1 主界面
     public static boolean mainTable() {
         System.out.println("-- Welcome --");
-        System.out.print("请输入账号(输入0退出)：");
-        String account = re.nextLine();
+        System.out.print("\n请输入账号(输入0退出)：");
+        String account = re.next();
         if(account.equals("0")) return false;
         System.out.print("请输入密码：");
-        String password = re.nextLine();
+        String password = re.next();
         int res = 0;
         try {
             res = biz.Login(account, password);
@@ -51,8 +52,10 @@ public class Main {
             studentTable(account);
         } else if(res == 2) {
             System.out.println("登录为：宿舍管理员");
+            managerTable(account);
         } else if(res == 3) {
             System.out.println("登录为：超级管理员");
+            System.out.println("暂未开放...");
         }
         return true;
     }
@@ -63,7 +66,7 @@ public class Main {
             Student student = biz.selectStudentById(student_id);
             System.out.println("\n欢迎同学：" + student.getName());
             int status = student.getStatus();
-            System.out.println("1 - 查看\\修改个人信息\n2 - 查看\\修改所在宿舍信息\n3 - 查看所在楼宇信息\n4 - " + (status == 0 ? "签到" : "签退") + "\n5 - 宿舍缴费\n6 - 注销账户");
+            System.out.println("\n1 - 查看\\修改个人信息\n2 - 查看\\修改所在宿舍信息\n3 - 查看所在楼宇信息\n4 - " + (status == 0 ? "签到" : "签退") + "\n5 - 宿舍缴费\n6 - 注销账户");
             System.out.print("请选择：");
             int op = re.nextInt();
             if(op == 1) {
@@ -72,7 +75,7 @@ public class Main {
                 } catch (NoSuchAccountException e) {
                     System.out.println("账户不存在");
                 }
-                System.out.println("1 - 修改信息\n2 - 返回学生界面");
+                System.out.println("\n1 - 修改信息\n2 - 返回学生界面");
                 System.out.print("请选择：");
                 int op1 = re.nextInt();
                 if(op1 == 1) {
@@ -87,7 +90,7 @@ public class Main {
                 } catch (NoSuchAccountException e) {
                     System.out.println("账户不存在");
                 }
-                System.out.println("1 - 修改信息\n2 - 返回学生界面");
+                System.out.println("\n1 - 修改信息\n2 - 返回学生界面");
                 System.out.print("请选择：");
                 int op1 = re.nextInt();
                 if(op1 == 1) {
@@ -116,12 +119,11 @@ public class Main {
                 System.out.println("请输入缴费金额");
                 double value = re.nextDouble();
                 try {
-                    result = biz.saveMoney(student.getBuilding_id(), student.getDorm_id(), value);
+                    result = biz.saveMoney(student.getStudent_id(), student.getBuilding_id(), student.getDorm_id(), value);
                 } catch (InputValueException e) {
                     System.out.println("缴费金额异常");
                 }
                 System.out.println(result ? "缴费成功" : "缴费失败");
-
             } else if(op == 6) {
                 break;
             } else {
@@ -136,21 +138,70 @@ public class Main {
 //            Student student = biz.selectById(student_id);
             Manager manager = biz.selectManagerById(manager_id);
             System.out.println("\n欢迎宿管：" + manager.getName());
-            System.out.println("1 - 查看\\修改个人信息\n2 - 查看\\修改所管理宿舍信息\n3 - 查看所管理楼宇信息\n4 - 宿舍缴费\n5 - 查看日志\n6 - 注销账户");
+            System.out.println("\n1 - 查看\\修改个人信息\n2 - 查看\\修改所管理宿舍信息\n3 - 查看所管理楼宇信息\n4 - 宿舍缴费\n5 - 查看日志\n6 - 注销账户");
             System.out.print("请选择：");
             int op = re.nextInt();
             if(op == 1) {
                 biz.managerShowOnAll(manager);
+                System.out.println("\n1 - 修改信息\n2 - 返回宿管界面");
+                System.out.print("请选择：");
+                int op1 = re.nextInt();
+                if(op1 == 1) {
+                    System.out.println("功能暂未开放");
+                    System.out.println("（在多条文本框中展示全部信息，修改保存即可更新信息）");
+                } else if(op1 == 2) {
+                    System.out.println("返回上一界面");
+                }
             } else if(op == 2) {
-
+                List<Building> buildingList = biz.searchBuildingsByManager_id(manager_id);
+                System.out.println(buildingList);
+                System.out.println("\n1 - 修改信息\n2 - 返回宿管界面");
+                System.out.print("请选择：");
+                int op1 = re.nextInt();
+                if(op1 == 1) {
+                    System.out.println("功能暂未开放");
+                    System.out.println("（在多条文本框中展示全部信息，修改保存即可更新信息）");
+                } else if(op1 == 2) {
+                    System.out.println("返回上一界面");
+                }
             } else if(op == 3) {
-
+                List<Building> buildingList = biz.searchBuildingsByManager_id(manager_id);
+                List<Dorm> dormList = biz.searchDormsByBuilding_id(buildingList);
+                System.out.println(dormList);
+                System.out.println("\n1 - 修改信息\n2 - 返回宿管界面");
+                System.out.print("请选择：");
+                int op1 = re.nextInt();
+                if(op1 == 1) {
+                    System.out.println("功能暂未开放");
+                    System.out.println("（在多条文本框中展示全部信息，修改保存即可更新信息）");
+                } else if(op1 == 2) {
+                    System.out.println("返回上一界面");
+                }
             } else if(op == 4) {
-
+                System.out.print("请输入缴费完整宿舍号（如11#518）：");
+                String buildingAndDorm_id = re.next();
+                int idx = buildingAndDorm_id.indexOf('#');
+                String building_id = buildingAndDorm_id.substring(0, idx);
+                String dorm_id = buildingAndDorm_id.substring(idx + 1);
+                System.out.println("请确认：" + building_id + "#" + dorm_id);
+                boolean result = false;
+                System.out.println("请输入缴费金额");
+                double value = re.nextDouble();
+                try {
+                    result = biz.saveMoney(manager_id, building_id, dorm_id, value);
+                } catch (InputValueException e) {
+                    System.out.println("缴费金额异常");
+                }
+                System.out.println(result ? "缴费成功" : "缴费失败");
             } else if(op == 5) {
-
+                System.out.println(biz.searchAllLog());
+                try {
+                    Enter();
+                } catch (IOException e) {
+                    System.out.println("输入异常");
+                }
             } else if(op == 6) {
-
+                break;
             } else {
                 System.out.print("输入错误, 即将返回宿管界面");
             }
