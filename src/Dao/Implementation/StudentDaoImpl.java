@@ -1,7 +1,9 @@
 package Dao.Implementation;
 
+import ApartmentUtil.DateFormat;
 import Dao.BaseDao;
 import Dao.Interfaces.StudentDao;
+import Ex.InputValueException;
 import Po.Student;
 
 import java.sql.SQLException;
@@ -140,5 +142,80 @@ public class StudentDaoImpl extends BaseDao implements StudentDao {
             e.printStackTrace();
         }
         return res;
+    }
+
+    @Override
+    public int signIn(String student_id) {
+        int res1 = 0, res2 = 0;
+        String sql = "update `student` set `status` = 1 where `student_id` = ?";
+        String sql2 = "insert into `log` (`log_id`, `account_id`, `type`, `date`) values (null, ?, ?, ?)";
+        try {
+            conn.setAutoCommit(false);
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, student_id);
+            res1 = pst.executeUpdate();
+            pst = conn.prepareStatement(sql2);
+            pst.setString(1, student_id);
+            pst.setInt(2, 2);
+            pst.setString(3, DateFormat.nowToDateTime());
+            res2 = pst.executeUpdate();
+            System.out.println("res1 = " + res1 + "   res2 = " + res2);
+            if(res1 * res2 > 0) {
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res1 * res2;
+    }
+
+    @Override
+    public int signOut(String student_id) {
+        int res1 = 0, res2 = 0;
+        String sql = "update `student` set `status` = 0 where `student_id` = ?";
+        String sql2 = "insert into `log` (`log_id`, `account_id`, `type`, `date`) values (null, ?, ?, ?)";
+        try {
+            conn.setAutoCommit(false);
+            pst = conn.prepareStatement(sql);
+            pst.setString(1, student_id);
+            res1 = pst.executeUpdate();
+            pst = conn.prepareStatement(sql2);
+            pst.setString(1, student_id);
+            pst.setInt(2, 3);
+            pst.setString(3, DateFormat.nowToDateTime());
+            res2 = pst.executeUpdate();
+            System.out.println("res1 = " + res1 + "   res2 = " + res2);
+            if(res1 * res2 > 0) {
+                conn.commit();
+            } else {
+                conn.rollback();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return res1 * res2;
+    }
+
+    @Override
+    public int saveMoney(String student_id, double value) throws InputValueException {
+        if(value < 0) {
+            throw new InputValueException(value);
+        }
+        int res = 0;
+        String sql = "update `dorm` set `deposit` = deposit + ? where `building_id` = ? and `dorm_id` = ?";
+        Student student = selectById(student_id);
+        try {
+            conn = getConnection();
+            pst = conn.prepareStatement(sql);
+            pst.setDouble(1, value);
+            pst.setString(2, student.getBuilding_id());
+            pst.setString(3, student.getDorm_id());
+            res = pst.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
     }
 }

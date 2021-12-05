@@ -16,7 +16,8 @@ public class DormDaoImpl extends BaseDao implements DormDao {
         try {
             conn = getConnection();
             pst = conn.prepareStatement(sql);
-            pst.setString(1, dorm_id);
+            pst.setString(1, building_id);
+            pst.setString(2, dorm_id);
             rs = pst.executeQuery();
             if(rs.next()) {
                 dorm = new Dorm();

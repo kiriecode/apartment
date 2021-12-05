@@ -4,11 +4,11 @@ import Controller.Implementation.BizImpl;
 import Controller.Interfaces.Biz;
 import Dao.Implementation.RegisterDaoImpl;
 import Dao.Interfaces.RegisterDao;
+import Dao.Interfaces.StudentDao;
 import Ex.NoSuchAccountException;
 import Ex.PasswordWrongException;
 import Po.*;
 
-import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
@@ -38,16 +38,18 @@ public class Main {
         rea.close();
     }
     // x1-1 学生界面
-    public static void studentTable(Student student) {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+    public static void studentTable(String student_id) {
+        System.out.println("\n\n\n\n\n\n\n");
         while (true) {
-            System.out.println("欢迎同学：" + student.getName());
-            System.out.println("1 - 查看\\修改个人信息\n2 - 查看\\修改所在宿舍信息\n3 - 查看所在楼宇信息\n4 - 签到\n5 - 签退\n6 - 宿舍缴费\n7 - 注销账户");
+            Student student = biz.selectById(student_id);
+            System.out.println("\n\n\n\n欢迎同学：" + student.getName());
+            int status = student.getStatus();
+            System.out.println("1 - 查看\\修改个人信息\n2 - 查看\\修改所在宿舍信息\n3 - 查看所在楼宇信息\n4 - " + (status == 0 ? "签到" : "签退") + "\n5 - 宿舍缴费\n6 - 注销账户");
             System.out.print("请选择：");
             int op = re.nextInt();
             if(op == 1) {
                 try {
-                    biz.studentShow(student.getStudent_id());
+                    biz.studentStudentShow(student);
                 } catch (NoSuchAccountException e) {
                     System.out.println("账户不存在");
                 }
@@ -56,18 +58,42 @@ public class Main {
                 int op1 = re.nextInt();
                 if(op1 == 1) {
                     System.out.println("功能暂未开放");
+                    System.out.println("（在多条文本框中展示全部信息，修改保存即可更新信息）");
+                } else if(op1 == 2) {
+                    System.out.println("返回上一界面");
                 }
             } else if(op == 2) {
-
+                try {
+                    biz.dormStudentShow(student.getBuilding_id(), student.getDorm_id());
+                } catch (NoSuchAccountException e) {
+                    System.out.println("账户不存在");
+                }
+                System.out.println("1 - 修改信息\n2 - 返回学生界面");
+                System.out.print("请选择：");
+                int op1 = re.nextInt();
+                if(op1 == 1) {
+                    System.out.println("功能暂未开放");
+                    System.out.println("（在多条文本框中展示全部信息，修改保存即可更新信息）");
+                } else if(op1 == 2) {
+                    System.out.println("返回上一界面");
+                }
             } else if(op == 3) {
-
+                try {
+                    biz.buildingStudentShow(student);
+                } catch (NoSuchAccountException e) {
+                    System.out.println("楼宇不存在");
+                }
+                System.out.println("输入任意字符并回车以继续");
+                re.next();
             } else if(op == 4) {
-
+                if(status == 0) {
+                    System.out.println(biz.signIn(student.getStudent_id()) ?"签到成功！" : "签到失败！");
+                } else {
+                    System.out.println(biz.signOut(student.getStudent_id()) ?"签退成功！" : "签退失败！");
+                }
             } else if(op == 5) {
 
             } else if(op == 6) {
-
-            } else if(op == 7) {
                 break;
             } else {
                 System.out.print("输入错误, 即将返回学生界面");
@@ -93,7 +119,7 @@ public class Main {
         if(student != null) {
             System.out.println("login success!");
             System.out.println("----------------------------------");
-            studentTable(student); // exp 进入学生界面
+            studentTable(student.getStudent_id()); // exp 进入学生界面
         } else {
             System.out.println("password wrong!");
         }

@@ -3,10 +3,13 @@ package Controller.Implementation;
 import Controller.Interfaces.Biz;
 import Dao.Implementation.*;
 import Dao.Interfaces.*;
+import Ex.InputValueException;
 import Ex.NoSuchAccountException;
 import Ex.PasswordWrongException;
-import Po.Register;
-import Po.Student;
+import Po.*;
+
+import java.sql.SQLException;
+import java.util.List;
 
 public class BizImpl implements Biz {
     StudentDao studentDao = new StudentDaoImpl();
@@ -32,59 +35,70 @@ public class BizImpl implements Biz {
     }
 
     @Override
-    public void studentShow(String student_id) throws NoSuchAccountException {
-        Student student = studentDao.selectById(student_id);
-        if(student == null) {
-            throw new NoSuchAccountException(student_id);
-        }
-        System.out.println(student.toString());
+    public Student selectById(String student_id) {
+        return studentDao.selectById(student_id);
+    }
+
+    public void studentStudentShow(Student student) throws NoSuchAccountException {
+        System.out.println(student);
     }
 
     @Override
-    public boolean studentUpdate(Student student) {
-
-        return false;
+    public void dormStudentShow(String building_id, String dorm_id) throws NoSuchAccountException {
+        Dorm dorm = dormDao.selectById(building_id, dorm_id);
+        if(dorm == null) {
+            throw new NoSuchAccountException(building_id + "#" + dorm_id);
+        }
+        System.out.println(dorm);
     }
 
-
-    /*@Override
-    public boolean signIn(String student_id) throws SQLException, ClassNotFoundException {
-        // x0 建立链接，关闭回滚
-        con = getConnection();
-        con.setAutoCommit(false);
-
-        // x1 查询状态
-//        Student student = selectById(student_id);
-//        if(student.getStatus() == 1) {
-//            // todo 抛出异常：已经签到
-//            return false;
-//        }
-        // x2 修改学生状态
-        String sql1 = "update `student` set `status` = 1 where student_id = ?";
-        pst = con.prepareStatement(sql1);
-        pst.setString(1, student_id);
-        int res1 = pst.executeUpdate();
-        System.out.println("res1 = " + res1);
-
-        // x3 添加记录
-        String sql2 = "insert into `operation` (`account_id`, `type`, `date`) values (?, ?, ?)";
-        pst = con.prepareStatement(sql2);
-        pst.setString(1, student_id);
-        pst.setInt(2, 2);
-        pst.setString(3, DateFormat.nowToDateTime());
-        int res2 = pst.executeUpdate();
-        System.out.println("res2 = " + res2);
-
-        // 4 提交事务
-        if(res1 * res2 > 0) {
-            System.out.println("c1");
-            con.commit();
-            System.out.println("c2");
-        } else {
-            System.out.println("c3");
-            con.rollback();
-            System.out.println("c4");
+    @Override
+    public void buildingStudentShow(Student student) throws NoSuchAccountException {
+        String building_id = student.getBuilding_id();
+        Building building = buildingDao.selectById(building_id);
+        if(building == null) {
+            throw new NoSuchAccountException(building_id);
         }
-        return res1 * res2 > 0;
-    }*/
+        System.out.println(building);
+        int cnt = 0;
+        List<Student> studentList = studentDao.selectAll();
+        for(Student student0 : studentList) {
+            if(student0.getBuilding_id().equals(building_id)) {
+                cnt ++;
+            }
+        }
+        System.out.println("与你住在一栋楼的还有：" + cnt + " 位同学");
+        List<Manager> managerList = managerDao.selectAll();
+        Manager manager = null;
+        for(Manager manager0 : managerList) {
+            if(manager0.getManager_id().equals(building.getManager_id())) {
+                manager = manager0;
+                break;
+            }
+        }
+        if(manager != null) {
+            System.out.println("你的宿管阿姨是：" + manager.getName());
+        }
+    }
+
+    @Override
+    public boolean signIn(String student_id) {
+        return studentDao.signIn(student_id) > 0;
+    }
+
+    @Override
+    public boolean signOut(String student_id) {
+        return studentDao.signOut(student_id) > 0;
+    }
+
+    @Override
+    public int saveMoney(String student_id, double value) {
+        int res = 0;
+        try {
+            return studentDao.saveMoney(student_id, value);
+        } catch (InputValueException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
 }

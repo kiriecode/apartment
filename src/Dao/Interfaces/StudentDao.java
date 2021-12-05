@@ -1,5 +1,6 @@
 package Dao.Interfaces;
 
+import Ex.InputValueException;
 import Po.Student;
 
 import java.util.List;
@@ -15,4 +16,10 @@ public interface StudentDao {
     public int updateStudent(String student_id, Student student);
     // note 通过id删除
     public int deleteStudent(String student_id);
+    // note 签到
+    public int signIn(String student_id);
+    // note 签退
+    public int signOut(String student_id);
+    // note 缴费
+    public int saveMoney(String student_id, double value) throws InputValueException;
 }

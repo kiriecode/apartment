@@ -117,4 +117,4 @@ CREATE TABLE `log` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 INSERT INTO `log`VALUES (null, '19110103024', 1, '11', '518', 300.5, null);
-INSERT INTO `log`(	`log_id`, `account_id`, `type`, `date`) VALUES (20002, '19110103024', 2, null);
+INSERT INTO `log`(	`log_id`, `account_id`, `type`, `date`) VALUES (null, '19110103024', 2, null);
