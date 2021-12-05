@@ -1,5 +1,6 @@
 package Dao.Interfaces;
 
+import Ex.InputValueException;
 import Po.Dorm;
 
 import java.util.List;
@@ -15,4 +16,7 @@ public interface DormDao {
     public int updateDorm(String building_id, String dorm_id, Dorm dorm);
     // note 通过id删除
     public int deleteDorm(String building_id, String dorm_id);
+
+    // note 缴费
+    public int saveMoney(String building_id, String dorm_id, double value) throws InputValueException;
 }

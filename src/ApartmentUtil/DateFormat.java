@@ -7,18 +7,18 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateFormat {
-    // now -> yyyy-MM-dd hh:mm:ss
+    // 当前时间 转换为 yyyy-MM-dd hh:mm:ss
     public static String nowToDateTime() {
-        String strDate = null;
+        String strDate;
         Date date = new Date();
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
         strDate = simpleDateFormat.format(date);
         return strDate;
     }
 
-    // 日期拼接，转化为数据库中的格式
+    // 年月日 转化为 数据库中的格式
     public static String timeToSave(String year, String month, String day) throws ParseException, TimeIllegalException {
-        String strDate = null;
+        String strDate;
         if(! illegalTime(Integer.parseInt(year), Integer.parseInt(month), Integer.parseInt(day)) | year.length() != 4 | month.length() != 2 | day.length() != 2) {
             throw new TimeIllegalException();
         }

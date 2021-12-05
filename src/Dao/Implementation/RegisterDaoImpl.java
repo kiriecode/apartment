@@ -98,4 +98,6 @@ public class RegisterDaoImpl extends BaseDao implements RegisterDao {
         }
         return res;
     }
+
+
 }

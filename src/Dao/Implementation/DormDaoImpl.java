@@ -2,6 +2,7 @@ package Dao.Implementation;
 
 import Dao.BaseDao;
 import Dao.Interfaces.DormDao;
+import Ex.InputValueException;
 import Po.Dorm;
 
 import java.sql.SQLException;
@@ -108,6 +109,26 @@ public class DormDaoImpl extends BaseDao implements DormDao {
             pst = conn.prepareStatement(sql);
             pst.setString(1, building_id);
             pst.setString(2, dorm_id);
+            res = pst.executeUpdate();
+        } catch (ClassNotFoundException | SQLException e) {
+            e.printStackTrace();
+        }
+        return res;
+    }
+
+    @Override
+    public int saveMoney(String building_id, String dorm_id, double value) throws InputValueException {
+        if(value < 0) {
+            throw new InputValueException(value);
+        }
+        int res = 0;
+        String sql = "update `dorm` set `deposit` = deposit + ? where `building_id` = ? and `dorm_id` = ?";
+        try {
+            conn = getConnection();
+            pst = conn.prepareStatement(sql);
+            pst.setDouble(1, value);
+            pst.setString(2, building_id);
+            pst.setString(3, dorm_id);
             res = pst.executeUpdate();
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

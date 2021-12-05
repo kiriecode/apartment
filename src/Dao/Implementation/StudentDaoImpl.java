@@ -197,25 +197,4 @@ public class StudentDaoImpl extends BaseDao implements StudentDao {
         }
         return res1 * res2;
     }
-
-    @Override
-    public int saveMoney(String student_id, double value) throws InputValueException {
-        if(value < 0) {
-            throw new InputValueException(value);
-        }
-        int res = 0;
-        String sql = "update `dorm` set `deposit` = deposit + ? where `building_id` = ? and `dorm_id` = ?";
-        Student student = selectById(student_id);
-        try {
-            conn = getConnection();
-            pst = conn.prepareStatement(sql);
-            pst.setDouble(1, value);
-            pst.setString(2, student.getBuilding_id());
-            pst.setString(3, student.getDorm_id());
-            res = pst.executeUpdate();
-        } catch (ClassNotFoundException | SQLException e) {
-            e.printStackTrace();
-        }
-        return 0;
-    }
 }

@@ -20,6 +20,4 @@ public interface StudentDao {
     public int signIn(String student_id);
     // note 签退
     public int signOut(String student_id);
-    // note 缴费
-    public int saveMoney(String student_id, double value) throws InputValueException;
 }
